@@ -9,22 +9,27 @@ import (
 )
 
 const (
-	apiURL        = "http://api.football-data.org"
-	apiVersion    = "/v1"
-	apiKey        = "fd40d0d8c60842e9bc81ba025a33a719"
-	competitionID = "/467"
-	compEndPoint  = "/competitions"
-	teamsEndPoint = "/teams"
-	fixtureMethod = "/fixtures"
-	playersMethod = "/players"
-	nameFilter    = "?name="
+	apiURL         = "http://api.football-data.org"
+	apiVersion     = "/v1"
+	apiKey         = "fd40d0d8c60842e9bc81ba025a33a719"
+	competitionID  = "/467"
+	compEndPoint   = "/competitions"
+	teamsEndPoint  = "/teams"
+	fixtureMethod  = "/fixtures"
+	playersMethod  = "/players"
+	nameFilter     = "?name="
+	matchdayFilter = "?matchday="
 )
 
-func getFixtures() Fixtures {
+func getFixtures(matchday int) Fixtures {
 
 	client := &http.Client{}
 
 	url := apiURL + apiVersion + compEndPoint + competitionID + fixtureMethod
+
+	if matchday != -1 {
+		url += matchdayFilter + strconv.Itoa(matchday)
+	}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

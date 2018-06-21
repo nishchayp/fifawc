@@ -10,6 +10,7 @@ var (
 	options struct {
 		fixtures bool
 		team     string
+		matchday int
 	}
 )
 
@@ -20,8 +21,12 @@ func main() {
 		printUsage()
 	}
 
+	if !options.fixtures && options.matchday != -1 {
+		options.fixtures = true
+	}
+
 	if options.fixtures {
-		result := getFixtures()
+		result := getFixtures(options.matchday)
 		for _, f := range result.Fixtures {
 			fmt.Println(`Matchday: `, f.Matchday)
 			fmt.Println(`Date: `, f.Date)
@@ -56,6 +61,7 @@ func main() {
 func init() {
 	flag.BoolVarP(&options.fixtures, "fixtures", "f", false, "Get fixtures")
 	flag.StringVarP(&options.team, "squad", "s", "", "Get squad by team name")
+	flag.IntVarP(&options.matchday, "matchday", "m", -1, "Filter fixtures by matchday")
 }
 
 func printUsage() {
